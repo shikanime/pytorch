@@ -106,7 +106,7 @@ at::TensorOptions options_from_string(const std::string& str) {
 
   auto it = map->find(str);
   if (it == map->end()) {
-    throw ValueError("invalid type: '%s'", str.c_str());
+    C10_THROW_ERROR(ValueError, c10::str("invalid type: '",str,"'"));
   }
   return it->second->options();
 }
