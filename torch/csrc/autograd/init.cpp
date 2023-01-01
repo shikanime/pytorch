@@ -549,9 +549,11 @@ static PyObject* is_grad_enabled(PyObject* _unused, PyObject* arg) {
 
 static PyObject* set_fwd_grad_enabled(PyObject* _unused, PyObject* arg) {
   HANDLE_TH_ERRORS
-  if (!PyBool_Check(arg)) {
-    throw TypeError("enabled must be a bool (got %s)", Py_TYPE(arg)->tp_name);
-  }
+  TORCH_CHECK_TYPE(
+      PyBool_Check(arg),
+      "enabled must be a bool (got ",
+      Py_TYPE(arg)->tp_name,
+      ")");
   c10::AutogradState::get_tls_state().set_fw_grad_mode(arg == Py_True);
   Py_RETURN_NONE;
   END_HANDLE_TH_ERRORS
